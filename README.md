@@ -1,173 +1,204 @@
-# 📚 Book Manager — Week 3 Backend
 
-Backend API for the Book Manager application built with **Node.js, Express.js, and MongoDB**.
+---
 
-This backend provides authentication and RESTful APIs for managing books and works with the Week 3 React frontend.
+## Backend — `README.md`
+
+```md
+# 📚 Book Manager – Backend
+
+A RESTful backend API for the Book Manager application built with **Node.js, Express, MongoDB, and Mongoose**.
+
+The backend provides authentication, book CRUD operations, image uploads, and dashboard statistics.
 
 ## ✨ Features
 
 ### 🔐 Authentication
 
-* User registration
-* User login
-* JWT-based authentication
-* Protected API routes
-* Password hashing with bcrypt
+- User registration
+- User login
+- JWT authentication
+- Protected routes
+- Password hashing with bcryptjs
 
-### 📚 Book Management API
+### 📚 Book Management
 
-* Create books
-* Get all books
-* Get a single book
-* Update books
-* Delete books
-* Book cover image upload support
-* User-specific book management
+- Create books
+- Get all books
+- Get a single book
+- Update books
+- Delete books
+- Book categories
+- Book prices
+- Published dates
+- Book descriptions
+- Cover image uploads
 
-### 🛡️ Security & Performance
+### 📊 Dashboard Statistics
 
-* Helmet security middleware
-* CORS configuration
-* Rate limiting
-* Environment variable support
-* Centralized error handling
-* Request validation
+The backend provides authenticated dashboard statistics including:
+
+- Total books
+- Total collection value
+- Books grouped by category
+- Books added over time
+- Average price by category
+
+Dashboard statistics are calculated server-side using MongoDB aggregation pipelines.
+
+### 🛡️ Security
+
+- Helmet
+- CORS
+- Express Rate Limit
+- JWT authentication
+- Password hashing
+- Server-side validation
 
 ## 🛠️ Tech Stack
 
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* JSON Web Token (JWT)
-* bcrypt
-* dotenv
-* CORS
-* Helmet
-* Express Rate Limit
-* Multer
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcryptjs
+- Multer
+- Helmet
+- CORS
+- Express Rate Limit
+- dotenv
 
 ## 📁 Project Structure
 
 ```text
 backend/
-├── api/
 ├── config/
 │   └── db.js
 ├── controllers/
 │   ├── authController.js
-│   └── bookController.js
+│   ├── bookController.js
+│   └── dashboardController.js
 ├── middleware/
-│   ├── authMiddleware.js
-│   └── errorHandler.js
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── upload.js
 ├── models/
 │   ├── User.js
 │   └── Book.js
 ├── routes/
 │   ├── authRoutes.js
-│   └── bookRoutes.js
+│   ├── bookRoutes.js
+│   └── dashboardRoutes.js
 ├── uploads/
-├── .env.example
 ├── server.js
 └── package.json
-```
-
-## 🚀 Installation
+🚀 Installation
 
 Clone the repository:
 
-```bash
-git clone https://github.com/Abdulkhaliqdev2007/book-manager-week3-backend.git
-```
+git clone https://github.com/Abdulkhaliqdev2007/book-manager-week4-backend.git
 
-Navigate to the project:
+Go to the project directory:
 
-```bash
-cd book-manager-week3-backend
-```
+cd book-manager-week4-backend
 
 Install dependencies:
 
-```bash
 npm install
-```
+⚙️ Environment Variables
 
-## 🔐 Environment Variables
+Create a .env file in the backend root:
 
-Create a `.env` file in the project root.
-
-Example:
-
-```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-```
+JWT_SECRET=your_jwt_secret
 
-Do not commit `.env` or any real credentials to GitHub.
+Replace the values with your own configuration.
 
-## ▶️ Run the Server
+Do not commit the .env file to GitHub.
 
-Start the development server:
-
-```bash
+▶️ Run the Server
+Development
 npm run dev
-```
+Production
+npm start
 
-The API will normally run at:
+The API normally runs on:
 
-```text
 http://localhost:5000
-```
+🔗 API Endpoints
+Authentication
+POST /api/auth/signup
+POST /api/auth/login
+Books
+GET    /api/books
+GET    /api/books/:id
+POST   /api/books
+PUT    /api/books/:id
+DELETE /api/books/:id
 
-## 🔗 Frontend Repository
+Creating, updating, and deleting books require authentication.
 
-Week 3 frontend:
+Dashboard
+GET /api/dashboard/stats
 
-https://github.com/Abdulkhaliqdev2007/book-manager-week3-frontend
+The dashboard endpoint requires a valid JWT token.
 
-## 📡 API Endpoints
+📊 Dashboard API Response
 
-### Authentication
+The dashboard endpoint returns statistics in the following structure:
 
-| Method | Endpoint           | Description                    |
-| ------ | ------------------ | ------------------------------ |
-| POST   | `/api/auth/signup` | Register a new user            |
-| POST   | `/api/auth/login`  | Login user                     |
-| GET    | `/api/auth/me`     | Get current authenticated user |
+{
+  "success": true,
+  "data": {
+    "totalBooks": 0,
+    "totalValue": 0,
+    "booksByCategory": [],
+    "booksOverTime": [],
+    "averagePriceByCategory": []
+  }
+}
+🖼️ Image Uploads
 
-### Books
+Book cover images are uploaded using Multer.
 
-| Method | Endpoint         | Description       |
-| ------ | ---------------- | ----------------- |
-| GET    | `/api/books`     | Get all books     |
-| GET    | `/api/books/:id` | Get a single book |
-| POST   | `/api/books`     | Create a book     |
-| PUT    | `/api/books/:id` | Update a book     |
-| DELETE | `/api/books/:id` | Delete a book     |
+Uploaded images are served through:
 
-## 🔑 Authentication
+/uploads
+🔐 Authentication
 
-Protected endpoints require a JWT token in the request header:
+Protected routes require a JWT token:
 
-```text
 Authorization: Bearer <token>
-```
 
-## 🎯 Week 3 Integration
+The authentication middleware verifies the token and attaches the authenticated user to:
 
-This backend is used by the Week 3 React frontend, which introduces:
+req.user
+🛡️ Security
 
-* React Context API
-* Shared global state
-* Centralized data-fetching patterns
-* Loading states
-* Empty states
-* Improved error handling
-* Search and sort functionality
+The API uses:
 
-## 👨‍💻 Author
+Helmet
+CORS
+Express Rate Limit
+JWT
+bcryptjs
+Environment variables
+Protected API routes
+Server-side validation
+📌 Project Status
 
-**Hafiz Abdul Khaliq**
+Week 4 – Dashboard with Data Visualization
 
-GitHub: https://github.com/Abdulkhaliqdev2007
+The backend now provides dashboard statistics through a protected API endpoint using MongoDB aggregation.
+
+👨‍💻 Author
+
+Abdulkhaliqdev2007
+
+GitHub:
+
+https://github.com/Abdulkhaliqdev2007
+📄 License
+
+This project is licensed under the MIT License.
